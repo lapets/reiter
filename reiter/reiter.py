@@ -20,6 +20,16 @@ class reiter(Iterator): # pylint: disable=C0103
     def __new__(cls, iterable):
         """
         Constructor that wraps an iterator or iterable.
+
+        >>> xs = iter([1, 2, 3])
+        >>> isinstance(reiter(xs), reiter)
+        True
+        >>> list(reiter(reiter(iter([1, 2, 3]))))
+        [1, 2, 3]
+        >>> reiter(123)
+        Traceback (most recent call last):
+          ...
+        TypeError: supplied object is not iterable
         """
         if isinstance(iterable, reiter):
             return iterable
@@ -40,6 +50,16 @@ class reiter(Iterator): # pylint: disable=C0103
         """
         Substitute definition that caches the retrieved
         item before returning it.
+
+        >>> xs = reiter([1, 2, 3])
+        >>> [x for x in xs]
+        [1, 2, 3]
+        >>> xs = reiter(iter([1, 2, 3]))
+        >>> [x for x in xs]
+        [1, 2, 3]
+        >>> xs = reiter(iter([1, 2, 3]))
+        >>> next(xs)
+        1
         """
         item = self._iterable.__next__()
         self._iterated.append(item)
@@ -50,6 +70,18 @@ class reiter(Iterator): # pylint: disable=C0103
         Returns the item at the specified index, retrieving
         additional items from the iterator (and caching them)
         as necessary to reach the specified index.
+
+        >>> xs = reiter([1, 2, 3])
+        >>> xs[2]
+        3
+        >>> xs = reiter(range(10))
+        >>> xs[0]
+        0
+        >>> xs = reiter(range(10))
+        >>> xs[10]
+        Traceback (most recent call last):
+          ...
+        IndexError: index out of range
         """
         if len(self._iterated) <= index:
             for _ in range(len(self._iterated), index + 1):
@@ -69,6 +101,22 @@ class reiter(Iterator): # pylint: disable=C0103
         Build a new iterator that begins at the first cached
         element and continues from there. This method
         is an effective way to "reset" the iterator.
+
+        >>> xs = reiter([1, 2, 3])
+        >>> next(xs)
+        1
+        >>> next(xs)
+        2
+        >>> list(reiter(xs))
+        [1, 2, 3]
+        >>> next(xs)
+        Traceback (most recent call last):
+          ...
+        StopIteration
+        >>> list(reiter(xs))
+        [1, 2, 3]
+        >>> list(reiter(xs))
+        [1, 2, 3]
         """
         for item in self._iterated: # pylint: disable=E1133
             yield item
