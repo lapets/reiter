@@ -7,12 +7,16 @@ random-access interface by caching retrieved items for later reuse.
 from __future__ import annotations
 import doctest
 from collections.abc import Iterator
-from itertools import chain
 
-class reiter(Iterator):
+class reiter(Iterator): # pylint: disable=C0103
     """
     Wrapper class for iterators and iterables.
     """
+
+    _iterated = None
+    _iterable = None
+    _complete = None
+
     def __new__(cls, iterable):
         """
         Constructor that wraps an iterator or iterable.
@@ -23,8 +27,8 @@ class reiter(Iterator):
         if not isinstance(iterable, Iterator):
             try:
                 iterable = iter(iterable)
-            except:
-                raise TypeError('supplied object is not iterable')
+            except TypeError:
+                raise TypeError('supplied object is not iterable') from None
 
         instance = super().__new__(cls)
         instance._iterable = iter(iterable)
@@ -48,7 +52,7 @@ class reiter(Iterator):
         as necessary to reach the specified index.
         """
         if len(self._iterated) <= index:
-            for index in range(len(self._iterated), index + 1):
+            for _ in range(len(self._iterated), index + 1):
                 try:
                     item = next(self._iterable)
                     self._iterated.append(item)
@@ -58,18 +62,18 @@ class reiter(Iterator):
         if index >= len(self._iterated):
             raise IndexError('index out of range')
 
-        return self._iterated[index]
+        return self._iterated[index] # pylint: disable=E1136
 
     def __iter__(self):
         """
         Build a new iterator that begins at the first cached
-        element and continues from there. This method 
+        element and continues from there. This method
         is an effective way to "reset" the iterator.
         """
-        for item in self._iterated:
+        for item in self._iterated: # pylint: disable=E1133
             yield item
         while True:
-            try:  
+            try:
                 item = self._iterable.__next__()
                 self._iterated.append(item)
                 yield item

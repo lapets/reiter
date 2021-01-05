@@ -21,6 +21,12 @@ The library can be imported in the usual way::
     import reiter
     from reiter import reiter
 
+Testing and Conventions
+-----------------------
+Style conventions are enforced using `Pylint <https://www.pylint.org/>`_::
+
+    pylint reiter
+
 Contributions
 -------------
 In order to contribute to the source code, open an issue or submit a pull request on the GitHub page for this library.
