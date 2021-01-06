@@ -4,7 +4,7 @@ reiter
 
 Wrapper for Python iterators and iterables that implements a list-like random-access interface by caching retrieved items for later reuse.
 
-|pypi| |travis|
+|pypi| |travis| |coveralls|
 
 .. |pypi| image:: https://badge.fury.io/py/reiter.svg
    :target: https://badge.fury.io/py/reiter
@@ -12,6 +12,9 @@ Wrapper for Python iterators and iterables that implements a list-like random-ac
 
 .. |travis| image:: https://travis-ci.com/lapets/reiter.svg?branch=master
    :target: https://travis-ci.com/lapets/reiter
+
+.. |coveralls| image:: https://coveralls.io/repos/github/lapets/reiter/badge.svg?branch=master
+   :target: https://coveralls.io/github/lapets/reiter?branch=master
 
 Package Installation and Usage
 ------------------------------
