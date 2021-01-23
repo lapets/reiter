@@ -126,7 +126,46 @@ class reiter(Iterator): # pylint: disable=C0103
                 self._iterated.append(item)
                 yield item
             except StopIteration:
+                self._complete = True
                 break
+
+    def has(self, index=None):
+        """
+        Return a boolean indicating whether a next item is available,
+        or if an item exists at the specified index.
+
+        >>> xs = reiter([1, 2, 3])
+        >>> (xs.has(), xs.has(2), xs.has())
+        (True, True, False)
+        >>> xs = reiter([1, 2, 3])
+        >>> xs.has(10)
+        False
+        """
+        index = len(self._iterated) if index is None else index
+        try:
+            self[index] # pylint: disable=W0104
+            return True
+        except (StopIteration, IndexError):
+            return False
+
+    def length(self):
+        """
+        If all items have been retrieved, return the length.
+
+        >>> xs = reiter([1, 2, 3])
+        >>> xs.length() is None
+        True
+        >>> list(xs)
+        [1, 2, 3]
+        >>> xs.length()
+        3
+        """
+        if self._complete:
+            return len(self._iterated)
+
+        # If not all items have been retrieved from the iterable,
+        # there is not yet a defined length.
+        return None
 
 if __name__ == "__main__":
     doctest.testmod() # pragma: no cover
