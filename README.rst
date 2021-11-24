@@ -10,15 +10,17 @@ Wrapper for Python iterators and iterables that implements a list-like random-ac
    :target: https://badge.fury.io/py/reiter
    :alt: PyPI version and link.
 
-.. |travis| image:: https://travis-ci.com/lapets/reiter.svg?branch=main
-   :target: https://travis-ci.com/lapets/reiter
+.. |travis| image:: https://app.travis-ci.com/lapets/reiter.svg?branch=main
+   :target: https://app.travis-ci.com/lapets/reiter
+   :alt: Travis CI build status.
 
 .. |coveralls| image:: https://coveralls.io/repos/github/lapets/reiter/badge.svg?branch=main
    :target: https://coveralls.io/github/lapets/reiter?branch=main
+   :alt: Coveralls test coverage summary.
 
 Package Installation and Usage
 ------------------------------
-The package is available on PyPI::
+The package is available on `PyPI <https://pypi.org/project/reiter/>`_::
 
     python -m pip install reiter
 
@@ -41,7 +43,8 @@ Testing and Conventions
 -----------------------
 All unit tests are executed and their coverage is measured when using `nose <https://nose.readthedocs.io/>`_ (see ``setup.cfg`` for configution details)::
 
-    nosetests
+    python -m pip install nose coverage
+    nosetests --cover-erase
 
 All unit tests are included in the module itself and can be executed using `doctest <https://docs.python.org/3/library/doctest.html>`_::
 
@@ -49,11 +52,12 @@ All unit tests are included in the module itself and can be executed using `doct
 
 Style conventions are enforced using `Pylint <https://www.pylint.org/>`_::
 
+    python -m pip install pylint
     pylint reiter
 
 Contributions
 -------------
-In order to contribute to the source code, open an issue or submit a pull request on the GitHub page for this library.
+In order to contribute to the source code, open an issue or submit a pull request on the `GitHub page <https://github.com/lapets/reiter>`_ for this library.
 
 Versioning
 ----------
