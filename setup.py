@@ -1,12 +1,16 @@
 from setuptools import setup
 
 with open("README.rst", "r") as fh:
-    long_description = fh.read()
+    long_description = fh.read().replace(".. include:: toc.rst\n\n", "")
+
+# The lines below can be parsed by `docs/conf.py`.
+name = "reiter"
+version = "0.2.0"
 
 setup(
-    name="reiter",
-    version="0.2.0",
-    packages=["reiter",],
+    name=name,
+    version=version,
+    packages=[name,],
     install_requires=[],
     license="MIT",
     url="https://github.com/lapets/reiter",

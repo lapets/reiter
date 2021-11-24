@@ -10,11 +10,11 @@ Wrapper for Python iterators and iterables that implements a list-like random-ac
    :target: https://badge.fury.io/py/reiter
    :alt: PyPI version and link.
 
-.. |travis| image:: https://travis-ci.com/lapets/reiter.svg?branch=master
+.. |travis| image:: https://travis-ci.com/lapets/reiter.svg?branch=main
    :target: https://travis-ci.com/lapets/reiter
 
-.. |coveralls| image:: https://coveralls.io/repos/github/lapets/reiter/badge.svg?branch=master
-   :target: https://coveralls.io/github/lapets/reiter?branch=master
+.. |coveralls| image:: https://coveralls.io/repos/github/lapets/reiter/badge.svg?branch=main
+   :target: https://coveralls.io/github/lapets/reiter?branch=main
 
 Package Installation and Usage
 ------------------------------
@@ -26,6 +26,16 @@ The library can be imported in the usual way::
 
     import reiter
     from reiter import reiter
+
+Documentation
+-------------
+.. include:: toc.rst
+
+The documentation can be generated automatically from the source files using `Sphinx <https://www.sphinx-doc.org/>`_::
+
+    cd docs
+    python -m pip install -r requirements.txt
+    sphinx-apidoc -f -E --templatedir=_templates -o _source .. ../setup.py && make html
 
 Testing and Conventions
 -----------------------
