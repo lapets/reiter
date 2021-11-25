@@ -111,9 +111,9 @@ class reiter(Iterator): # pylint: disable=C0103
 
     def __getitem__(self, index):
         """
-        Returns the item at the specified index, retrieving additional
-        items from the iterator (and caching them) as necessary to reach
-        the specified index.
+        Returns the item at the supplied index or the items within the range
+        of the supplied slice, retrieving additional items from the iterator
+        (and caching them) as necessary.
 
         >>> xs = reiter(iter([1, 2, 3]))
         >>> xs[2]
@@ -128,19 +128,77 @@ class reiter(Iterator): # pylint: disable=C0103
         Traceback (most recent call last):
           ...
         IndexError: index out of range
+        >>> xs['abc']
+        Traceback (most recent call last):
+          ...
+        ValueError: index must be integer or slice
+
+        Use of slice notation is supported, but it should be used carefully.
+        Omitting a lower or upper bound may require retrieving (and caching)
+        all items.
+
+        >>> xs = reiter(iter([1, 2, 3]))
+        >>> xs[0:2]
+        [1, 2]
+        >>> xs = reiter(iter([1, 2, 3]))
+        >>> xs[:2]
+        [1, 2]
+        >>> xs = reiter(iter([1, 2, 3]))
+        >>> xs[0:]
+        [1, 2, 3]
+        >>> xs = reiter(iter([1, 2, 3]))
+        >>> xs[:]
+        [1, 2, 3]
+        >>> xs = reiter(iter([1, 2, 3]))
+        >>> xs[2:0:-1]
+        [3, 2]
+        >>> xs = reiter(iter([1, 2, 3]))
+        >>> xs[2::-1]
+        [3, 2, 1]
+        >>> xs = reiter(iter([1, 2, 3]))
+        >>> xs[::-1]
+        [3, 2, 1]
+        >>> xs = reiter(iter([1, 2, 3]))
+        >>> xs[:0:-1]
+        [3, 2]
         """
-        if len(self._iterated) <= index:
-            for _ in range(len(self._iterated), index + 1):
-                try:
-                    item = next(self._iterable)
-                    self._iterated.append(item)
-                except StopIteration:
-                    self._complete = True
+        if isinstance(index, int):
+            upper = index
+            if len(self._iterated) <= upper:
+                while len(self._iterated) <= upper:
+                    try:
+                        self._iterated.append(next(self._iterable))
+                    except StopIteration:
+                        self._complete = True
+                        break
 
-        if index >= len(self._iterated):
-            raise IndexError('index out of range')
+            if upper >= len(self._iterated):
+                raise IndexError('index out of range')
 
-        return self._iterated[index] # pylint: disable=E1136
+            return self._iterated[upper] # pylint: disable=E1136
+
+        if isinstance(index, slice):
+            if index.step is None or index.step > 0:
+                while index.stop is None or len(self._iterated) < index.stop:
+                    try:
+                        self._iterated.append(next(self._iterable))
+                    except StopIteration:
+                        self._complete = True
+                        break
+            else:
+                # In this case, it must be that ``index.step < 0``. Thus, all
+                # items are retrieved in order to support wrapping around the
+                # first item.
+                while True:
+                    try:
+                        self._iterated.append(next(self._iterable))
+                    except StopIteration:
+                        self._complete = True
+                        break
+
+            return self._iterated[index] # pylint: disable=E1136
+
+        raise ValueError('index must be integer or slice')
 
     def __iter__(self):
         """
