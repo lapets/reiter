@@ -61,9 +61,13 @@ class reiter(Iterator): # pylint: disable=C0103
         >>> next(xs)
         1
         """
-        item = self._iterable.__next__()
-        self._iterated.append(item)
-        return item
+        try:
+            item = self._iterable.__next__()
+            self._iterated.append(item)
+            return item
+        except StopIteration:
+            self._complete = True
+            raise
 
     def __getitem__(self, index):
         """
@@ -152,11 +156,19 @@ class reiter(Iterator): # pylint: disable=C0103
         """
         If all items have been retrieved, return the length.
 
-        >>> xs = reiter([1, 2, 3])
+        >>> xs = reiter(iter([1, 2, 3]))
         >>> xs.length() is None
         True
-        >>> list(xs)
-        [1, 2, 3]
+        >>> next(xs)
+        1
+        >>> xs.length() is None
+        True
+        >>> next(xs), next(xs)
+        (2, 3)
+        >>> next(xs)
+        Traceback (most recent call last):
+          ...
+        StopIteration
         >>> xs.length()
         3
         """
