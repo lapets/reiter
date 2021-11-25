@@ -83,8 +83,8 @@ class reiter(Iterator): # pylint: disable=C0103
         >>> next(xs), next(xs), next(xs)
         (1, 2, 3)
 
-        Attempts to retrieve items once the sequence of items is exhausted
-        raise an exception in the usual manner.
+        Any attempt to retrieve items once the sequence of items is exhausted
+        raises an exception in the usual manner.
 
         >>> next(xs)
         Traceback (most recent call last):
@@ -92,7 +92,7 @@ class reiter(Iterator): # pylint: disable=C0103
         StopIteration
 
         However, all items yielded during iteration can be accessed by
-        their index and it is possible to iterate over them again.
+        their index, and it is also possible to iterate over them again.
 
         >>> xs[0], xs[1], xs[2]
         (1, 2, 3)
@@ -222,6 +222,15 @@ class reiter(Iterator): # pylint: disable=C0103
         Traceback (most recent call last):
           ...
         StopIteration
+        >>> xs.length()
+        3
+
+        Invoking the :obj:`has` method until the instance is exhausted
+        is sufficient to ensure that all items have been retrieved.
+
+        >>> xs = reiter(iter([1, 2, 3]))
+        >>> xs.has(), xs.has(), xs.has(), xs.has()
+        (True, True, True, False)
         >>> xs.length()
         3
         """

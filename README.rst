@@ -33,6 +33,53 @@ The library can be imported in the usual way::
     import reiter
     from reiter import reiter
 
+Examples
+^^^^^^^^
+The library makes it possible to wrap iterators and iterables within an interface that enables repeated iteration over -- and random access by index of -- the items contained within. A ``reiter`` instance yields the same sequence of items as the wrapped iterator::
+
+    >>> from reiter import reiter
+    >>> xs = iter([1, 2, 3])
+    >>> ys = reiter(xs)
+    >>> list(ys)
+    [1, 2, 3]
+
+However, unlike an iterator, the instance of this class can be iterated any number of times::
+
+    >>> list(ys), list(ys)
+    ([1, 2, 3], [1, 2, 3])
+
+Furthermore, it is also possible to access elements by their index::
+
+    >>> xs = iter([1, 2, 3])
+    >>> ys = reiter(xs)
+    >>> ys[0], ys[1], ys[2]
+    (1, 2, 3)
+
+The built-in Python ``next`` function is also supported, and any attempt to retrieve an item once the sequence of items is exhausted raises an exception in the usual manner::
+
+    >>> xs = reiter(iter([1, 2, 3]))
+    >>> next(xs), next(xs), next(xs)
+    (1, 2, 3)
+    >>> next(xs)
+    Traceback (most recent call last):
+      ...
+    StopIteration
+
+However, all items yielded during iteration can be accessed by their index, and it is also possible to iterate over those items again::
+
+    >>> xs[0], xs[1], xs[2]
+    (1, 2, 3)
+    >>> [x for x in xs]
+    [1, 2, 3]
+
+Instances of ``reiter`` support additional methods, as well. For example, the ``has`` method returns a boolean value indicating whether a next item is available and the ``length`` method returns the length of the sequence of items emitted by the instance (once no more items can be emitted)::
+
+    >>> xs = reiter(iter([1, 2, 3]))
+    >>> xs.has(), xs.has(), xs.has(), xs.has()
+    (True, True, True, False)
+    >>> xs.length()
+    3
+
 Documentation
 -------------
 .. include:: toc.rst
