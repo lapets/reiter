@@ -1,5 +1,4 @@
-"""Random-access interface for iterables.
-
+"""
 Wrapper for Python iterators and iterables that implements a list-like
 random-access interface by caching retrieved items for later reuse.
 """
@@ -10,22 +9,51 @@ from collections.abc import Iterator
 
 class reiter(Iterator): # pylint: disable=C0103
     """
-    Wrapper class for iterators and iterables.
+    Wrapper class for iterators and iterables that provides an
+    interface enabling repeated iteration and random access by index
+    of the sequence of items contained within.
     """
-
     _iterated = None
     _iterable = None
     _complete = None
 
     def __new__(cls, iterable):
         """
-        Constructor that wraps an iterator or iterable.
+        Constructor that wraps an iterator or iterable. An instance
+        of this class yields the same sequence of items as the
+        wrapped iterator.
 
         >>> xs = iter([1, 2, 3])
-        >>> isinstance(reiter(xs), reiter)
-        True
+        >>> ys = reiter(xs)
+        >>> list(ys)
+        [1, 2, 3]
+
+        However, unlike an iterator, the instance of this class can be
+        iterated any number of times.
+
+        >>> list(ys), list(ys)
+        ([1, 2, 3], [1, 2, 3])
+
+        Furthermore, it is also possible to access elements using their
+        index.
+
+        >>> xs = iter([1, 2, 3])
+        >>> ys = reiter(xs)
+        >>> ys[0], ys[1], ys[2]
+        (1, 2, 3)
+
+        An instance of this class can be constructed from another instance
+        of this class.
+
         >>> list(reiter(reiter(iter([1, 2, 3]))))
         [1, 2, 3]
+
+        The type of an instance of this class can be checked in the
+        usual manner, and an instance of this class cannot be constructed
+        from a value or object that is not an iterator or iterable.
+
+        >>> isinstance(reiter(xs), reiter)
+        True
         >>> reiter(123)
         Traceback (most recent call last):
           ...
@@ -48,18 +76,30 @@ class reiter(Iterator): # pylint: disable=C0103
 
     def __next__(self):
         """
-        Substitute definition that caches the retrieved
-        item before returning it.
+        Substitute definition of the corresponding method for iterators
+        that also caches the retrieved item before returning it.
 
-        >>> xs = reiter([1, 2, 3])
-        >>> [x for x in xs]
-        [1, 2, 3]
         >>> xs = reiter(iter([1, 2, 3]))
-        >>> [x for x in xs]
-        [1, 2, 3]
-        >>> xs = reiter(iter([1, 2, 3]))
+        >>> next(xs), next(xs), next(xs)
+        (1, 2, 3)
+
+        Attempts to retrieve items once the sequence of items is exhausted
+        raise an exception in the usual manner.
+
         >>> next(xs)
-        1
+        Traceback (most recent call last):
+          ...
+        StopIteration
+
+        However, all items yielded during iteration can be accessed by
+        their index and it is possible to iterate over them again.
+
+        >>> xs[0], xs[1], xs[2]
+        (1, 2, 3)
+        >>> [x for x in xs]
+        [1, 2, 3]
+        >>> [x for x in xs], [x for x in xs]
+        ([1, 2, 3], [1, 2, 3])
         """
         try:
             item = self._iterable.__next__()
@@ -71,13 +111,15 @@ class reiter(Iterator): # pylint: disable=C0103
 
     def __getitem__(self, index):
         """
-        Returns the item at the specified index, retrieving
-        additional items from the iterator (and caching them)
-        as necessary to reach the specified index.
+        Returns the item at the specified index, retrieving additional
+        items from the iterator (and caching them) as necessary to reach
+        the specified index.
 
-        >>> xs = reiter([1, 2, 3])
+        >>> xs = reiter(iter([1, 2, 3]))
         >>> xs[2]
         3
+        >>> xs[1]
+        2
         >>> xs = reiter(range(10))
         >>> xs[0]
         0
@@ -102,25 +144,25 @@ class reiter(Iterator): # pylint: disable=C0103
 
     def __iter__(self):
         """
-        Build a new iterator that begins at the first cached
-        element and continues from there. This method
-        is an effective way to "reset" the iterator.
+        Builds a new iterator that begins at the first cached element
+        and continues from there. This method is an effective way to
+        "reset" the instance of this class so that ``next`` can be
+        used again.
 
-        >>> xs = reiter([1, 2, 3])
+        >>> xs = reiter(iter([1, 2, 3]))
         >>> next(xs)
         1
         >>> next(xs)
         2
-        >>> list(reiter(xs))
-        [1, 2, 3]
+        >>> next(xs)
+        3
         >>> next(xs)
         Traceback (most recent call last):
           ...
         StopIteration
-        >>> list(reiter(xs))
-        [1, 2, 3]
-        >>> list(reiter(xs))
-        [1, 2, 3]
+        >>> xs = iter(xs)
+        >>> next(xs), next(xs), next(xs)
+        (1, 2, 3)
         """
         for item in self._iterated: # pylint: disable=E1133
             yield item
@@ -135,14 +177,23 @@ class reiter(Iterator): # pylint: disable=C0103
 
     def has(self, index=None):
         """
-        Return a boolean indicating whether a next item is available,
+        Returns a boolean indicating whether a next item is available,
         or if an item exists at the specified index.
 
-        >>> xs = reiter([1, 2, 3])
-        >>> (xs.has(), xs.has(2), xs.has())
-        (True, True, False)
-        >>> xs = reiter([1, 2, 3])
-        >>> xs.has(10)
+        >>> xs = reiter(iter([1, 2, 3]))
+        >>> xs.has(), xs.has(), xs.has(), xs.has()
+        (True, True, True, False)
+
+        If an explicit index is supplied, a boolean value is returned
+        indicating whether an item exists at that position in the sequence
+        within the wrapped iterator or iterable.
+
+        >>> xs.has(2)
+        True
+        >>> xs = reiter(iter([1, 2, 3]))
+        >>> xs.has(2)
+        True
+        >>> xs.has(3)
         False
         """
         index = len(self._iterated) if index is None else index
@@ -154,7 +205,9 @@ class reiter(Iterator): # pylint: disable=C0103
 
     def length(self):
         """
-        If all items have been retrieved, return the length.
+        Returns the length of this instance, if *all* items have been
+        retrieved. If not all items have been retrieved, ``None`` is
+        returned.
 
         >>> xs = reiter(iter([1, 2, 3]))
         >>> xs.length() is None

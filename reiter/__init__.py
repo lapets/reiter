@@ -1,2 +1,2 @@
-"""Give users direct access to the class."""
+"""Gives users direct access to the class."""
 from reiter.reiter import reiter
