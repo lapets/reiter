@@ -4,6 +4,7 @@ random-access interface by caching retrieved items for later reuse.
 """
 
 from __future__ import annotations
+from typing import Optional, Union
 import doctest
 from collections.abc import Iterator
 
@@ -74,7 +75,7 @@ class reiter(Iterator): # pylint: disable=C0103
         instance._complete = False
         return instance
 
-    def __next__(self):
+    def __next__(self: reiter):
         """
         Substitute definition of the corresponding method for iterators
         that also caches the retrieved item before returning it.
@@ -109,7 +110,7 @@ class reiter(Iterator): # pylint: disable=C0103
             self._complete = True
             raise
 
-    def __getitem__(self, index):
+    def __getitem__(self: reiter, index: Union[int, slice]):
         """
         Returns the item at the supplied index or the items within the range
         of the supplied slice, retrieving additional items from the iterator
@@ -200,7 +201,7 @@ class reiter(Iterator): # pylint: disable=C0103
 
         raise ValueError('index must be integer or slice')
 
-    def __iter__(self):
+    def __iter__(self: reiter):
         """
         Builds a new iterator that begins at the first cached element
         and continues from there. This method is an effective way to
@@ -233,7 +234,7 @@ class reiter(Iterator): # pylint: disable=C0103
                 self._complete = True
                 break
 
-    def has(self, index=None):
+    def has(self: reiter, index: Optional[int] = None):
         """
         Returns a boolean indicating whether a next item is available,
         or if an item exists at the specified index.
@@ -261,7 +262,7 @@ class reiter(Iterator): # pylint: disable=C0103
         except (StopIteration, IndexError):
             return False
 
-    def length(self):
+    def length(self: reiter) -> Optional[int]:
         """
         Returns the length of this instance, if *all* items have been
         retrieved. If not all items have been retrieved, ``None`` is
