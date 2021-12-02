@@ -14,8 +14,8 @@ Wrapper for Python iterators and iterables that implements a list-like random-ac
    :target: https://reiter.readthedocs.io/en/latest/?badge=latest
    :alt: Read the Docs documentation status.
 
-.. |actions| image:: https://github.com/lapets/reiter/workflows/lint-test-cover/badge.svg
-   :target: https://github.com/lapets/reiter/actions/workflows/lint-test-cover.yml
+.. |actions| image:: https://github.com/lapets/reiter/workflows/lint-test-cover-docs/badge.svg
+   :target: https://github.com/lapets/reiter/actions/workflows/lint-test-cover-docs.yml
    :alt: GitHub Actions status.
 
 .. |coveralls| image:: https://coveralls.io/repos/github/lapets/reiter/badge.svg?branch=main
