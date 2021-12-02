@@ -4,7 +4,7 @@ reiter
 
 Wrapper for Python iterators and iterables that implements a list-like random-access interface by caching retrieved items for later reuse.
 
-|pypi| |readthedocs| |travis| |coveralls|
+|pypi| |readthedocs| |actions| |coveralls|
 
 .. |pypi| image:: https://badge.fury.io/py/reiter.svg
    :target: https://badge.fury.io/py/reiter
@@ -14,9 +14,9 @@ Wrapper for Python iterators and iterables that implements a list-like random-ac
    :target: https://reiter.readthedocs.io/en/latest/?badge=latest
    :alt: Read the Docs documentation status.
 
-.. |travis| image:: https://app.travis-ci.com/lapets/reiter.svg?branch=main
-   :target: https://app.travis-ci.com/lapets/reiter
-   :alt: Travis CI build status.
+.. |actions| image:: https://github.com/lapets/reiter/workflows/lint-test-cover/badge.svg
+   :target: https://github.com/lapets/reiter/actions/workflows/lint-test-cover.yml
+   :alt: GitHub Actions status.
 
 .. |coveralls| image:: https://coveralls.io/repos/github/lapets/reiter/badge.svg?branch=main
    :target: https://coveralls.io/github/lapets/reiter?branch=main
@@ -92,7 +92,7 @@ The documentation can be generated automatically from the source files using `Sp
 
 Testing and Conventions
 -----------------------
-All unit tests are executed and their coverage is measured when using `nose <https://nose.readthedocs.io/>`_ (see ``setup.cfg`` for configution details)::
+All unit tests are executed and their coverage is measured when using `nose <https://nose.readthedocs.io/>`_ (see ``setup.cfg`` for configuration details)::
 
     python -m pip install nose coverage
     nosetests --cover-erase
