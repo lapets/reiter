@@ -5,7 +5,7 @@ with open("README.rst", "r") as fh:
 
 # The lines below can be parsed by `docs/conf.py`.
 name = "reiter"
-version = "0.4.1"
+version = "0.4.2"
 
 setup(
     name=name,
