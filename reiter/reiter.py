@@ -2,35 +2,35 @@
 Wrapper for Python iterators and iterables that implements a list-like
 random-access interface by caching retrieved items for later reuse.
 """
-
 from __future__ import annotations
-from typing import Optional, Union
+from typing import Optional, Union, Any
 import doctest
-from collections.abc import Iterator
+from collections.abc import Iterable, Iterator
 
 class reiter(Iterator): # pylint: disable=C0103
     """
-    Wrapper class for iterators and iterables that provides an
-    interface enabling repeated iteration and random access by index
-    of the sequence of items contained within.
+    Wrapper class for `iterators <https://docs.python.org/3/glossary.html#term-iterator>`__
+    and `iterables <https://docs.python.org/3/glossary.html#term-iterable>`__ that provides
+    an interface enabling repeated iteration and random access by index of the sequence of
+    items contained within.
     """
     _iterated = None
     _iterable = None
     _complete = None
 
-    def __new__(cls, iterable):
+    def __new__(cls, iterable: Iterable):
         """
-        Constructor that wraps an iterator or iterable. An instance
-        of this class yields the same sequence of items as the
-        wrapped iterator.
+        Constructor that wraps an iterator or iterable. An instance of this
+        class yields the same sequence of items as the wrapped object.
 
         >>> xs = iter([1, 2, 3])
         >>> ys = reiter(xs)
         >>> list(ys)
         [1, 2, 3]
 
-        However, unlike an iterator, the instance of this class can be
-        iterated any number of times.
+        Unlike iterators and some iterable objects (including those that are
+        built-in and those that are user-defined), an instance of this class
+        *always* allows iteration over its items any number of times.
 
         >>> list(ys), list(ys)
         ([1, 2, 3], [1, 2, 3])
@@ -75,7 +75,7 @@ class reiter(Iterator): # pylint: disable=C0103
         instance._complete = False
         return instance
 
-    def __next__(self: reiter):
+    def __next__(self: reiter) -> Any:
         """
         Substitute definition of the corresponding method for iterators
         that also caches the retrieved item before returning it.
@@ -110,7 +110,7 @@ class reiter(Iterator): # pylint: disable=C0103
             self._complete = True
             raise
 
-    def __getitem__(self: reiter, index: Union[int, slice]):
+    def __getitem__(self: reiter, index: Union[int, slice]) -> Any:
         """
         Returns the item at the supplied index or the items within the range
         of the supplied slice, retrieving additional items from the iterator
@@ -201,11 +201,11 @@ class reiter(Iterator): # pylint: disable=C0103
 
         raise ValueError('index must be integer or slice')
 
-    def __iter__(self: reiter):
+    def __iter__(self: reiter) -> Iterable:
         """
-        Builds a new iterator that begins at the first cached element
-        and continues from there. This method is an effective way to
-        "reset" the instance of this class so that ``next`` can be
+        Builds a new iterator that begins at the first cached element and
+        continues from there. This method is an effective way to "reset" the
+        instance of this class so that the built-in :obj:`next` function can be
         used again.
 
         >>> xs = reiter(iter([1, 2, 3]))
@@ -234,7 +234,7 @@ class reiter(Iterator): # pylint: disable=C0103
                 self._complete = True
                 break
 
-    def has(self: reiter, index: Optional[int] = None):
+    def has(self: reiter, index: Optional[int] = None) -> bool:
         """
         Returns a boolean indicating whether a next item is available,
         or if an item exists at the specified index.

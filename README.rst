@@ -35,7 +35,11 @@ The library can be imported in the usual way::
 
 Examples
 ^^^^^^^^
-The library makes it possible to wrap iterators and iterables within an interface that enables repeated iteration over -- and random access by index of -- the items contained within. A ``reiter`` instance yields the same sequence of items as the wrapped iterator::
+
+.. |reiter| replace:: ``reiter``
+.. _reiter: https://reiter.readthedocs.io/en/latest/_source/reiter.html#reiter.reiter.reiter
+
+This library makes it possible to wrap `iterators <https://docs.python.org/3/glossary.html#term-iterator>`__ and `iterables <https://docs.python.org/3/glossary.html#term-iterable>`__ within an interface that enables repeated iteration over -- and random access by index of -- the items contained within. A |reiter|_ instance yields the same sequence of items as the wrapped iterator or iterable::
 
     >>> from reiter import reiter
     >>> xs = iter([1, 2, 3])
@@ -43,7 +47,7 @@ The library makes it possible to wrap iterators and iterables within an interfac
     >>> list(ys)
     [1, 2, 3]
 
-However, unlike an iterator, the instance of this class can be iterated any number of times::
+Unlike iterators and some iterable objects (including those that are built-in and those that are user-defined), an instance of the |reiter|_ class *always* allows iteration over its items any number of times::
 
     >>> list(ys), list(ys)
     ([1, 2, 3], [1, 2, 3])
@@ -55,7 +59,13 @@ Furthermore, it is also possible to access elements by their index::
     >>> ys[0], ys[1], ys[2]
     (1, 2, 3)
 
-The built-in Python ``next`` function is also supported, and any attempt to retrieve an item once the sequence of items is exhausted raises an exception in the usual manner::
+.. |next| replace:: ``next``
+.. _next: https://docs.python.org/3/library/functions.html#next
+
+.. |StopIteration| replace:: ``StopIteration``
+.. _StopIteration: https://docs.python.org/3/library/exceptions.html#StopIteration
+
+The built-in Python |next|_ function is also supported, and any attempt to retrieve an item once the sequence of items is exhausted raises the |StopIteration|_ exception in the usual manner::
 
     >>> xs = reiter(iter([1, 2, 3]))
     >>> next(xs), next(xs), next(xs)
@@ -72,7 +82,22 @@ However, all items yielded during iteration can be accessed by their index, and 
     >>> [x for x in xs]
     [1, 2, 3]
 
-Instances of ``reiter`` support additional methods, as well. For example, the ``has`` method returns a boolean value indicating whether a next item is available and the ``length`` method returns the length of the sequence of items emitted by the instance (once no more items can be emitted)::
+.. |reiter___getitem__| replace:: ``__getitem__``
+.. _reiter___getitem__: https://reiter.readthedocs.io/en/latest/_source/reiter.html#reiter.reiter.reiter.__getitem__
+
+Retrieval of yielded items using slice notation is also supported via the |reiter___getitem__|_ method::
+
+	>>> xs = reiter(iter([1, 2, 3]))
+	>>> xs[0:2]
+	[1, 2]
+
+.. |reiter_has| replace:: ``has``
+.. _reiter_has: https://reiter.readthedocs.io/en/latest/_source/reiter.html#reiter.reiter.reiter.has
+
+.. |reiter_length| replace:: ``length``
+.. _reiter_length: https://reiter.readthedocs.io/en/latest/_source/reiter.html#reiter.reiter.reiter.length
+
+Instances of |reiter|_ support additional inspection methods, as well. For example, the |reiter_has|_ method returns a boolean value indicating whether a next item is available and the |reiter_length|_ method returns the length of the sequence of items emitted by the instance (once no more items can be emitted)::
 
     >>> xs = reiter(iter([1, 2, 3]))
     >>> xs.has(), xs.has(), xs.has(), xs.has()
