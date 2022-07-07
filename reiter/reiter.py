@@ -300,5 +300,5 @@ class reiter(Iterator): # pylint: disable=C0103
         # there is not yet a defined length.
         return None
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     doctest.testmod() # pragma: no cover
