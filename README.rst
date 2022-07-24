@@ -37,7 +37,7 @@ Examples
 ^^^^^^^^
 
 .. |reiter| replace:: ``reiter``
-.. _reiter: https://reiter.readthedocs.io/en/0.7.0/_source/reiter.html#reiter.reiter.reiter
+.. _reiter: https://reiter.readthedocs.io/en/0.7.1/_source/reiter.html#reiter.reiter.reiter
 
 This library makes it possible to wrap `iterators <https://docs.python.org/3/glossary.html#term-iterator>`__ and `iterables <https://docs.python.org/3/glossary.html#term-iterable>`__ within an interface that enables repeated iteration over -- and random access by index of -- the items contained within. A |reiter|_ instance yields the same sequence of items as the wrapped iterator or iterable::
 
@@ -83,7 +83,7 @@ However, all items yielded during iteration can be accessed by their index, and 
     [1, 2, 3]
 
 .. |reiter___getitem__| replace:: ``__getitem__``
-.. _reiter___getitem__: https://reiter.readthedocs.io/en/0.7.0/_source/reiter.html#reiter.reiter.reiter.__getitem__
+.. _reiter___getitem__: https://reiter.readthedocs.io/en/0.7.1/_source/reiter.html#reiter.reiter.reiter.__getitem__
 
 Retrieval of yielded items using slice notation is also supported via the |reiter___getitem__|_ method::
 
@@ -92,10 +92,10 @@ Retrieval of yielded items using slice notation is also supported via the |reite
     [1, 2]
 
 .. |reiter_has| replace:: ``has``
-.. _reiter_has: https://reiter.readthedocs.io/en/0.7.0/_source/reiter.html#reiter.reiter.reiter.has
+.. _reiter_has: https://reiter.readthedocs.io/en/0.7.1/_source/reiter.html#reiter.reiter.reiter.has
 
 .. |reiter_length| replace:: ``length``
-.. _reiter_length: https://reiter.readthedocs.io/en/0.7.0/_source/reiter.html#reiter.reiter.reiter.length
+.. _reiter_length: https://reiter.readthedocs.io/en/0.7.1/_source/reiter.html#reiter.reiter.reiter.length
 
 Instances of |reiter|_ support additional inspection methods, as well. For example, the |reiter_has|_ method returns a boolean value indicating whether a next item is available and the |reiter_length|_ method returns the length of the sequence of items emitted by the instance (once no more items can be emitted)::
 
@@ -149,16 +149,16 @@ This library can be published as a `package on PyPI <https://pypi.org/project/re
 
     python -m pip install .[publish]
 
-Ensure that the correct version number appears in the ``pyproject.toml`` file and in any links to this package's Read the Docs documentation that exist in this README document. Also ensure that the Read the Docs project for this library has an `automation rule <https://docs.readthedocs.io/en/stable/automation-rules.html>`__ that activates and sets as the default all tagged versions. Create and push a tag for this version (replacing ``?.?.?`` with the version number)::
+Ensure that the correct version number appears in ``pyproject.toml``, and that any links in this README document to the Read the Docs documentation of this package (or its dependencies) have appropriate version numbers. Also ensure that the Read the Docs project for this library has an `automation rule <https://docs.readthedocs.io/en/stable/automation-rules.html>`__ that activates and sets as the default all tagged versions. Create and push a tag for this version (replacing ``?.?.?`` with the version number)::
 
     git tag ?.?.?
     git push origin ?.?.?
 
-Remove any old build/distribution files. Then, package the source into a distribution archive using the `wheel <https://pypi.org/project/wheel>`__ package::
+Remove any old build/distribution files. Then, package the source into a distribution archive::
 
     rm -rf build dist src/*.egg-info
     python -m build --sdist --wheel .
 
-Finally, upload the package distribution archive to `PyPI <https://pypi.org>`__ using the `twine <https://pypi.org/project/twine>`__ package::
+Finally, upload the package distribution archive to `PyPI <https://pypi.org>`__::
 
     python -m twine upload dist/*
