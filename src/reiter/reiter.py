@@ -3,11 +3,11 @@ Wrapper for Python iterators and iterables that implements a list-like
 random-access interface by caching retrieved items for later reuse.
 """
 from __future__ import annotations
-from typing import Optional, Union, Any
+from typing import Any, Union, Optional, Iterable
 import doctest
-from collections.abc import Iterable, Iterator
+import collections.abc
 
-class reiter(Iterator):
+class reiter(collections.abc.Iterator):
     """
     Wrapper class for `iterators <https://docs.python.org/3/glossary.html#term-iterator>`__
     and `iterables <https://docs.python.org/3/glossary.html#term-iterable>`__ that provides
@@ -63,14 +63,14 @@ class reiter(Iterator):
         if isinstance(iterable, reiter):
             return iterable
 
-        if not isinstance(iterable, Iterator):
+        if not isinstance(iterable, collections.abc.Iterator):
             try:
                 iterable = iter(iterable)
             except TypeError:
                 raise TypeError('supplied object is not iterable') from None
 
         instance = super().__new__(cls)
-        instance._iterable = iter(iterable)
+        instance._iterable = iterable # At this point, this must be an iterator.
         instance._iterated = []
         instance._complete = False
         return instance
