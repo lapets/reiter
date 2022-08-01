@@ -7,7 +7,7 @@ from typing import Optional, Union, Any
 import doctest
 from collections.abc import Iterable, Iterator
 
-class reiter(Iterator): # pylint: disable=C0103
+class reiter(Iterator):
     """
     Wrapper class for `iterators <https://docs.python.org/3/glossary.html#term-iterator>`__
     and `iterables <https://docs.python.org/3/glossary.html#term-iterable>`__ that provides
@@ -176,7 +176,7 @@ class reiter(Iterator): # pylint: disable=C0103
             if upper >= len(self._iterated):
                 raise IndexError('index out of range')
 
-            return self._iterated[upper] # pylint: disable=E1136
+            return self._iterated[upper] # pylint: disable=unsubscriptable-object
 
         if isinstance(index, slice):
             if index.step is None or index.step > 0:
@@ -197,7 +197,7 @@ class reiter(Iterator): # pylint: disable=C0103
                         self._complete = True
                         break
 
-            return self._iterated[index] # pylint: disable=E1136
+            return self._iterated[index] # pylint: disable=unsubscriptable-object
 
         raise ValueError('index must be integer or slice')
 
@@ -223,7 +223,7 @@ class reiter(Iterator): # pylint: disable=C0103
         >>> next(xs), next(xs), next(xs)
         (1, 2, 3)
         """
-        for item in self._iterated: # pylint: disable=E1133
+        for item in self._iterated: # pylint: disable=not-an-iterable
             yield item
         while True:
             try:
@@ -257,7 +257,7 @@ class reiter(Iterator): # pylint: disable=C0103
         """
         index = len(self._iterated) if index is None else index
         try:
-            self[index] # pylint: disable=W0104
+            _ = self[index] # Consume an item.
             return True
         except (StopIteration, IndexError):
             return False

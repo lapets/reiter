@@ -37,7 +37,7 @@ Examples
 ^^^^^^^^
 
 .. |reiter| replace:: ``reiter``
-.. _reiter: https://reiter.readthedocs.io/en/0.7.1/_source/reiter.html#reiter.reiter.reiter
+.. _reiter: https://reiter.readthedocs.io/en/0.7.2/_source/reiter.html#reiter.reiter.reiter
 
 This library makes it possible to wrap `iterators <https://docs.python.org/3/glossary.html#term-iterator>`__ and `iterables <https://docs.python.org/3/glossary.html#term-iterable>`__ within an interface that enables repeated iteration over -- and random access by index of -- the items contained within. A |reiter|_ instance yields the same sequence of items as the wrapped iterator or iterable::
 
@@ -83,7 +83,7 @@ However, all items yielded during iteration can be accessed by their index, and 
     [1, 2, 3]
 
 .. |reiter___getitem__| replace:: ``__getitem__``
-.. _reiter___getitem__: https://reiter.readthedocs.io/en/0.7.1/_source/reiter.html#reiter.reiter.reiter.__getitem__
+.. _reiter___getitem__: https://reiter.readthedocs.io/en/0.7.2/_source/reiter.html#reiter.reiter.reiter.__getitem__
 
 Retrieval of yielded items using slice notation is also supported via the |reiter___getitem__|_ method::
 
@@ -92,10 +92,10 @@ Retrieval of yielded items using slice notation is also supported via the |reite
     [1, 2]
 
 .. |reiter_has| replace:: ``has``
-.. _reiter_has: https://reiter.readthedocs.io/en/0.7.1/_source/reiter.html#reiter.reiter.reiter.has
+.. _reiter_has: https://reiter.readthedocs.io/en/0.7.2/_source/reiter.html#reiter.reiter.reiter.has
 
 .. |reiter_length| replace:: ``length``
-.. _reiter_length: https://reiter.readthedocs.io/en/0.7.1/_source/reiter.html#reiter.reiter.reiter.length
+.. _reiter_length: https://reiter.readthedocs.io/en/0.7.2/_source/reiter.html#reiter.reiter.reiter.length
 
 Instances of |reiter|_ support additional inspection methods, as well. For example, the |reiter_has|_ method returns a boolean value indicating whether a next item is available and the |reiter_length|_ method returns the length of the sequence of items emitted by the instance (once no more items can be emitted)::
 
