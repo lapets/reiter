@@ -39,7 +39,7 @@ Examples
 .. |reiter| replace:: ``reiter``
 .. _reiter: https://reiter.readthedocs.io/en/0.7.2/_source/reiter.html#reiter.reiter.reiter
 
-This library makes it possible to wrap `iterators <https://docs.python.org/3/glossary.html#term-iterator>`__ and `iterables <https://docs.python.org/3/glossary.html#term-iterable>`__ within an interface that enables repeated iteration over -- and random access by index of -- the items contained within. A |reiter|_ instance yields the same sequence of items as the wrapped iterator or iterable::
+This library makes it possible to wrap any `iterator <https://docs.python.org/3/glossary.html#term-iterator>`__ or `iterable <https://docs.python.org/3/glossary.html#term-iterable>`__ object within an interface that enables repeated iteration over -- and random access by index of -- the items contained within that object. A |reiter|_ instance yields the same sequence of items as the wrapped iterator or iterable::
 
     >>> from reiter import reiter
     >>> xs = iter([1, 2, 3])
@@ -47,8 +47,13 @@ This library makes it possible to wrap `iterators <https://docs.python.org/3/glo
     >>> list(ys)
     [1, 2, 3]
 
-Unlike iterators and some iterable objects (including those that are built-in and those that are user-defined), an instance of the |reiter|_ class *always* allows iteration over its items any number of times::
+.. |iter| replace:: ``iter``
+.. _iter: https://docs.python.org/3/library/functions.html#iter
 
+Unlike iterators and some iterable objects (including those that are built-in and those that are user-defined), an instance of the |reiter|_ class *always* allows iteration over its items any number of times. More specifically, every invocation of |iter|_ (explicit or implicit) returns an iterator that begins iteration from the first item found in the originally wrapped iterator or iterable::
+
+    >>> list(iter(ys)), list(iter(ys))
+    ([1, 2, 3], [1, 2, 3])
     >>> list(ys), list(ys)
     ([1, 2, 3], [1, 2, 3])
 
