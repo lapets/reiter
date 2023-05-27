@@ -7,7 +7,7 @@ from typing import Any, Union, Optional, Iterable
 import doctest
 import collections.abc
 
-class reiter(collections.abc.Iterator):
+class reiter(collections.abc.Iterator, collections.abc.Iterable):
     """
     Wrapper class for `iterators <https://docs.python.org/3/glossary.html#term-iterator>`__
     and `iterables <https://docs.python.org/3/glossary.html#term-iterable>`__ that provides
